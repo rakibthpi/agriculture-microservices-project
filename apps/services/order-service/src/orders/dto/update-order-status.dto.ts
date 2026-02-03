@@ -1,5 +1,5 @@
-import {IsEnum, IsOptional, IsString} from "class-validator";
-import {OrderStatus} from "../entities/order.entity";
+import { IsEnum, IsOptional, IsString } from 'class-validator';
+import { OrderStatus } from '../entities/order.entity';
 
 export class UpdateOrderStatusDto {
   @IsEnum(OrderStatus)

@@ -1,9 +1,9 @@
-import {Injectable, ConflictException, NotFoundException} from "@nestjs/common";
-import {InjectRepository} from "@nestjs/typeorm";
-import {Repository} from "typeorm";
-import {Category} from "./entities/category.entity";
-import {CreateCategoryDto} from "./dto/create-category.dto";
-import {UpdateCategoryDto} from "./dto/update-category.dto";
+import { Injectable, ConflictException, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Category } from './entities/category.entity';
+import { CreateCategoryDto } from './dto/create-category.dto';
+import { UpdateCategoryDto } from './dto/update-category.dto';
 
 @Injectable()
 export class CategoriesService {
@@ -14,11 +14,11 @@ export class CategoriesService {
 
   async create(createCategoryDto: CreateCategoryDto): Promise<Category> {
     const existing = await this.categoryRepository.findOne({
-      where: {name: createCategoryDto.name},
+      where: { name: createCategoryDto.name },
     });
 
     if (existing) {
-      throw new ConflictException("Category already exists");
+      throw new ConflictException('Category already exists');
     }
 
     const category = this.categoryRepository.create(createCategoryDto);
@@ -26,31 +26,31 @@ export class CategoriesService {
   }
 
   async findAll(includeInactive = false): Promise<Category[]> {
-    const where = includeInactive ? {} : {isActive: true};
+    const where = includeInactive ? {} : { isActive: true };
     return this.categoryRepository.find({
       where,
-      order: {displayOrder: "ASC", name: "ASC"},
+      order: { displayOrder: 'ASC', name: 'ASC' },
     });
   }
 
   async findOne(id: string): Promise<Category> {
     const category = await this.categoryRepository.findOne({
-      where: {id},
-      relations: ["products"],
+      where: { id },
+      relations: ['products'],
     });
     if (!category) {
-      throw new NotFoundException("Category not found");
+      throw new NotFoundException('Category not found');
     }
     return category;
   }
 
   async findBySlug(slug: string): Promise<Category> {
     const category = await this.categoryRepository.findOne({
-      where: {slug},
-      relations: ["products"],
+      where: { slug },
+      relations: ['products'],
     });
     if (!category) {
-      throw new NotFoundException("Category not found");
+      throw new NotFoundException('Category not found');
     }
     return category;
   }

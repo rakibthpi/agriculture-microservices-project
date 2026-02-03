@@ -1,5 +1,5 @@
-import {IsOptional, IsNumber, IsString, IsBoolean, IsUUID, IsIn, Min, Max} from "class-validator";
-import {Type} from "class-transformer";
+import { IsOptional, IsNumber, IsString, IsBoolean, IsUUID, IsIn, Min, Max } from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class ProductQueryDto {
   @IsOptional()
@@ -46,11 +46,11 @@ export class ProductQueryDto {
 
   @IsOptional()
   @IsString()
-  @IsIn(["name", "price", "createdAt", "stock"])
-  sort?: string = "createdAt";
+  @IsIn(['name', 'price', 'createdAt', 'stock'])
+  sort?: string = 'createdAt';
 
   @IsOptional()
   @IsString()
-  @IsIn(["ASC", "DESC", "asc", "desc"])
-  order?: string = "DESC";
+  @IsIn(['ASC', 'DESC', 'asc', 'desc'])
+  order?: string = 'DESC';
 }

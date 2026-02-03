@@ -1,15 +1,15 @@
-import {Module} from "@nestjs/common";
-import {ConfigModule} from "@nestjs/config";
-import {ProxyModule} from "./proxy/proxy.module";
-import {HealthController} from "./health/health.controller";
-import {ThrottlerModule, ThrottlerGuard} from "@nestjs/throttler";
-import {APP_GUARD} from "@nestjs/core";
+import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import { ProxyModule } from './proxy/proxy.module';
+import { HealthController } from './health/health.controller';
+import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
+import { APP_GUARD } from '@nestjs/core';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: ".env",
+      envFilePath: '.env',
     }),
     ThrottlerModule.forRoot([
       {

@@ -26,7 +26,7 @@ The API Gateway acts as a reverse proxy, routing requests to appropriate microse
         ┌─────────────────────┼─────────────────────┐
         ▼                     ▼                     ▼
    Auth Service        Product Service        Order Service
-     (:3001)              (:3002)               (:3003)
+     (:4001)              (:4002)               (:4003)
 ```
 
 ---
@@ -94,12 +94,12 @@ PORT=4000
 NODE_ENV=development
 
 # Service URLs
-AUTH_SERVICE_URL=http://localhost:3001
-PRODUCT_SERVICE_URL=http://localhost:3002
-ORDER_SERVICE_URL=http://localhost:3003
+AUTH_SERVICE_URL=http://localhost:4001
+PRODUCT_SERVICE_URL=http://localhost:4002
+ORDER_SERVICE_URL=http://localhost:4003
 
 # CORS
-ALLOWED_ORIGINS=http://localhost:3000
+ALLOWED_ORIGINS=http://localhost:4005
 
 # Rate Limiting
 RATE_LIMIT_TTL=60

@@ -10,7 +10,7 @@ Modern, responsive web application built with Next.js App Router, serving both c
 
 ```
 ┌──────────────────────────────────────────────────────────────┐
-│                   FRONTEND (:3000)                            │
+│                   FRONTEND (:4005)                            │
 │                                                               │
 │  ┌─────────────────────────────────────────────────────────┐ │
 │  │                    PUBLIC PAGES                          │ │

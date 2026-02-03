@@ -10,7 +10,7 @@ Handles order placement, tracking, status updates, and order history.
 
 ```
 ┌──────────────────────────────────────────────────────────────┐
-│                   ORDER SERVICE (:3003)                       │
+│                   ORDER SERVICE (:4003)                       │
 │                                                               │
 │  ┌───────────────┐  ┌───────────────┐  ┌─────────────────┐  │
 │  │    Order      │  │    Status     │  │     Order       │  │
@@ -28,7 +28,7 @@ Handles order placement, tracking, status updates, and order history.
 ┌────────────────────┐                  ┌────────────────────┐
 │     ORDER DB       │                  │  Product Service   │
 │   (PostgreSQL)     │ ←  validates →   │  (Stock check)     │
-│      :5434         │                  │      :3002         │
+│      :5434         │                  │      :4002         │
 └────────────────────┘                  └────────────────────┘
 ```
 
@@ -231,12 +231,12 @@ DATABASE_USER=postgres
 DATABASE_PASSWORD=postgres
 
 # Service
-PORT=3003
+PORT=4003
 NODE_ENV=development
 
 # Internal Services
-AUTH_SERVICE_URL=http://localhost:3001
-PRODUCT_SERVICE_URL=http://localhost:3002
+AUTH_SERVICE_URL=http://localhost:4001
+PRODUCT_SERVICE_URL=http://localhost:4002
 
 # Order Settings
 ORDER_NUMBER_PREFIX=ORD

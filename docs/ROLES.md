@@ -192,10 +192,10 @@ getAllUsers() {
 ```typescript
 // Protected routes by role
 const routes = {
-  "/admin/*": ["super_admin", "admin"],
-  "/products/manage/*": ["super_admin", "admin", "product_manager"],
-  "/orders/*": ["user"],
-  "/dashboard": ["super_admin", "admin", "product_manager"],
+  '/admin/*': ['super_admin', 'admin'],
+  '/products/manage/*': ['super_admin', 'admin', 'product_manager'],
+  '/orders/*': ['user'],
+  '/dashboard': ['super_admin', 'admin', 'product_manager'],
 };
 ```
 

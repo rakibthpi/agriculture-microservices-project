@@ -10,7 +10,7 @@ Handles all authentication, authorization, and user management operations.
 
 ```
 ┌──────────────────────────────────────────────────────────────┐
-│                    AUTH SERVICE (:3001)                       │
+│                    AUTH SERVICE (:4001)                       │
 │                                                               │
 │  ┌───────────────┐  ┌───────────────┐  ┌─────────────────┐  │
 │  │  Registration │  │     Login     │  │  JWT Issuance   │  │
@@ -164,7 +164,7 @@ JWT_REFRESH_SECRET=your-refresh-secret-key
 JWT_REFRESH_EXPIRES_IN=7d
 
 # Service
-PORT=3001
+PORT=4001
 NODE_ENV=development
 
 # Password

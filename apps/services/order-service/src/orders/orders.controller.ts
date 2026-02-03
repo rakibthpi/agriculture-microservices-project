@@ -1,27 +1,41 @@
-import {Controller, Get, Post, Body, Patch, Param, Query, ParseUUIDPipe, Headers} from "@nestjs/common";
-import {OrdersService} from "./orders.service";
-import {CreateOrderDto} from "./dto/create-order.dto";
-import {UpdateOrderStatusDto} from "./dto/update-order-status.dto";
-import {OrderStatus} from "./entities/order.entity";
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Query,
+  ParseUUIDPipe,
+  Headers,
+} from '@nestjs/common';
+import { OrdersService } from './orders.service';
+import { CreateOrderDto } from './dto/create-order.dto';
+import { UpdateOrderStatusDto } from './dto/update-order-status.dto';
+import { OrderStatus } from './entities/order.entity';
 
-@Controller("orders")
+@Controller('orders')
 export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
 
   @Post()
-  async create(@Body() createOrderDto: CreateOrderDto, @Headers("x-user-id") userId?: string) {
+  async create(@Body() createOrderDto: CreateOrderDto, @Headers('x-user-id') userId?: string) {
     // In production, userId should come from JWT token via gateway
-    const finalUserId = userId || createOrderDto.userId || "anonymous";
+    const finalUserId = userId || createOrderDto.userId || 'anonymous';
     const order = await this.ordersService.create(finalUserId, createOrderDto);
     return {
       success: true,
       data: order,
-      message: "Order placed successfully",
+      message: 'Order placed successfully',
     };
   }
 
   @Get()
-  async findAll(@Query("page") page?: number, @Query("limit") limit?: number, @Query("status") status?: OrderStatus) {
+  async findAll(
+    @Query('page') page?: number,
+    @Query('limit') limit?: number,
+    @Query('status') status?: OrderStatus,
+  ) {
     const result = await this.ordersService.findAll(page, limit, status);
     return {
       success: true,
@@ -30,8 +44,12 @@ export class OrdersController {
     };
   }
 
-  @Get("user/:userId")
-  async findByUser(@Param("userId") userId: string, @Query("page") page?: number, @Query("limit") limit?: number) {
+  @Get('user/:userId')
+  async findByUser(
+    @Param('userId') userId: string,
+    @Query('page') page?: number,
+    @Query('limit') limit?: number,
+  ) {
     const result = await this.ordersService.findByUser(userId, page, limit);
     return {
       success: true,
@@ -40,7 +58,7 @@ export class OrdersController {
     };
   }
 
-  @Get("stats")
+  @Get('stats')
   async getStats() {
     const counts = await this.ordersService.countByStatus();
     return {
@@ -49,8 +67,8 @@ export class OrdersController {
     };
   }
 
-  @Get(":id")
-  async findOne(@Param("id", ParseUUIDPipe) id: string) {
+  @Get(':id')
+  async findOne(@Param('id', ParseUUIDPipe) id: string) {
     const order = await this.ordersService.findOne(id);
     return {
       success: true,
@@ -58,8 +76,8 @@ export class OrdersController {
     };
   }
 
-  @Get("number/:orderNumber")
-  async findByOrderNumber(@Param("orderNumber") orderNumber: string) {
+  @Get('number/:orderNumber')
+  async findByOrderNumber(@Param('orderNumber') orderNumber: string) {
     const order = await this.ordersService.findByOrderNumber(orderNumber);
     return {
       success: true,
@@ -67,8 +85,11 @@ export class OrdersController {
     };
   }
 
-  @Patch(":id/status")
-  async updateStatus(@Param("id", ParseUUIDPipe) id: string, @Body() updateStatusDto: UpdateOrderStatusDto) {
+  @Patch(':id/status')
+  async updateStatus(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() updateStatusDto: UpdateOrderStatusDto,
+  ) {
     const order = await this.ordersService.updateStatus(id, updateStatusDto);
     return {
       success: true,
@@ -77,11 +98,11 @@ export class OrdersController {
     };
   }
 
-  @Get("health")
+  @Get('health')
   healthCheck() {
     return {
       success: true,
-      message: "Order Service is running",
+      message: 'Order Service is running',
       timestamp: new Date().toISOString(),
     };
   }

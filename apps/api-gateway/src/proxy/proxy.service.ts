@@ -1,6 +1,6 @@
-import {Injectable, HttpException, Logger} from "@nestjs/common";
-import {ConfigService} from "@nestjs/config";
-import axios, {AxiosRequestConfig, Method} from "axios";
+import { Injectable, HttpException, Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import axios, { AxiosRequestConfig, Method } from 'axios';
 
 @Injectable()
 export class ProxyService {
@@ -9,15 +9,15 @@ export class ProxyService {
   constructor(private readonly configService: ConfigService) {}
 
   get authServiceUrl(): string {
-    return this.configService.get("AUTH_SERVICE_URL", "http://localhost:3001");
+    return this.configService.get('AUTH_SERVICE_URL', 'http://localhost:3001');
   }
 
   get productServiceUrl(): string {
-    return this.configService.get("PRODUCT_SERVICE_URL", "http://localhost:3002");
+    return this.configService.get('PRODUCT_SERVICE_URL', 'http://localhost:3002');
   }
 
   get orderServiceUrl(): string {
-    return this.configService.get("ORDER_SERVICE_URL", "http://localhost:3003");
+    return this.configService.get('ORDER_SERVICE_URL', 'http://localhost:3003');
   }
 
   async proxyRequest(
@@ -36,14 +36,14 @@ export class ProxyService {
       data,
       params: query,
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         ...headers,
       },
-      timeout: parseInt(this.configService.get("REQUEST_TIMEOUT", "30000"), 10),
+      timeout: parseInt(this.configService.get('REQUEST_TIMEOUT', '30000'), 10),
     };
 
     try {
-      if (this.configService.get("LOG_REQUESTS") === "true") {
+      if (this.configService.get('LOG_REQUESTS') === 'true') {
         this.logger.log(`Proxying ${method} ${url}`);
       }
 
@@ -53,10 +53,13 @@ export class ProxyService {
       this.logger.error(`Proxy error: ${error.message}`);
 
       if (error.response) {
-        throw new HttpException(error.response.data || {message: "Service error"}, error.response.status);
+        throw new HttpException(
+          error.response.data || { message: 'Service error' },
+          error.response.status,
+        );
       }
 
-      throw new HttpException({success: false, message: "Service unavailable"}, 503);
+      throw new HttpException({ success: false, message: 'Service unavailable' }, 503);
     }
   }
 }
