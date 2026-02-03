@@ -2,18 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 :root {
   --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 248, 250, 252;
+  --background-start-rgb: 250, 252, 250;
   --background-end-rgb: 255, 255, 255;
 }
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(to bottom, transparent, rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
-  font-family: "Inter", system-ui, sans-serif;
+  background: radial-gradient(circle at 50% 50%, #f7fef7 0%, #ffffff 100%);
+  font-family: 'Outfit', 'Inter', system-ui, sans-serif;
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 @layer utilities {

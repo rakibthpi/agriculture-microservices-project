@@ -10,7 +10,7 @@ Manages the product catalog including categories, products, search, and inventor
 
 ```
 ┌──────────────────────────────────────────────────────────────┐
-│                  PRODUCT SERVICE (:3002)                      │
+│                  PRODUCT SERVICE (:4002)                      │
 │                                                               │
 │  ┌───────────────┐  ┌───────────────┐  ┌─────────────────┐  │
 │  │   Category    │  │    Product    │  │     Search      │  │
@@ -197,11 +197,11 @@ DATABASE_USER=postgres
 DATABASE_PASSWORD=postgres
 
 # Service
-PORT=3002
+PORT=4002
 NODE_ENV=development
 
 # Internal Services (for JWT validation)
-AUTH_SERVICE_URL=http://localhost:3001
+AUTH_SERVICE_URL=http://localhost:4001
 
 # Pagination defaults
 DEFAULT_PAGE_SIZE=12

@@ -57,10 +57,10 @@ Create an online platform connecting farmers and sellers with customers, enablin
 
 ## 🏗 System Architecture
 
-```
+````
 ┌─────────────────────────────────────────────────────────────┐
 │                    Frontend (Next.js)                       │
-│                    http://localhost:3000                    │
+│                    http://localhost:4005                    │
 └─────────────────────────────────────────────────────────────┘
                               │
                               ▼
@@ -73,15 +73,40 @@ Create an online platform connecting farmers and sellers with customers, enablin
         ▼                     ▼                     ▼
 ┌───────────────┐   ┌───────────────┐   ┌───────────────┐
 │  Auth Service │   │Product Service│   │ Order Service │
-│  :3001        │   │  :3002        │   │  :3003        │
+│  :4001        │   │  :4002        │   │  :4003        │
 └───────────────┘   └───────────────┘   └───────────────┘
         │                     │                     │
         ▼                     ▼                     ▼
 ┌───────────────┐   ┌───────────────┐   ┌───────────────┐
 │   Auth DB     │   │  Product DB   │   │   Order DB    │
-│   :5432       │   │   :5433       │   │    :5434      │
-└───────────────┘   └───────────────┘   └───────────────┘
-```
+### Service Port Mapping
+
+| Service       | Default Port | Primary URL                  | Role               |
+| ------------- | ------------ | ---------------------------- | ------------------ |
+| **API Gateway** | `4000`       | `http://localhost:4000`      | Request Routing    |
+| **Auth Service** | `4001`       | `http://localhost:4001/api`  | User Auth & Profile |
+| **Product Service**| `4002`       | `http://localhost:4002/api`  | Category & Product |
+| **Order Service**  | `4003`       | `http://localhost:4003/api`  | Orders & Items     |
+| **Frontend**    | `4005`       | `http://localhost:4005`      | Client Application |
+
+### System Dependency Graph
+
+```mermaid
+graph TD
+    User([User]) --> Frontend[Frontend :4005]
+    Frontend --> Gateway[API Gateway :4000]
+    Gateway --> AuthService[Auth Service :4001]
+    Gateway --> ProductService[Product Service :4002]
+    Gateway --> OrderService[Order Service :4003]
+
+    OrderService -- Uses --> AuthService
+    OrderService -- Uses --> ProductService
+    ProductService -- Uses --> AuthService
+
+    AuthService --- AuthDB[(Auth DB)]
+    ProductService --- ProductDB[(Product DB)]
+    OrderService --- OrderDB[(Order DB)]
+````
 
 > 📖 See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for detailed architecture documentation.
 
@@ -166,7 +191,7 @@ docker-compose up -d
 npm run dev
 
 # 5. Open browser
-# Frontend: http://localhost:3000
+# Frontend: http://localhost:4005
 # API Gateway: http://localhost:4000
 ```
 
@@ -214,6 +239,23 @@ All `.env.example` files are in `docs/env-templates/`
 3. Write tests for new features
 4. Update documentation as needed
 5. Submit pull requests for review
+
+---
+
+## 🔧 Troubleshooting
+
+### Port Conflict (Windows EACCES)
+
+If you see `Error: listen EACCES: permission denied 0.0.0.0:3001` on Windows, it's likely because the port is in a reserved range (often due to Hyper-V).
+
+- **Solution**: We have moved services to the `4001-4005` range. Use these ports in your `.env` files.
+- **Check reserved ports**: `netsh int ipv4 show excludedportrange protocol=tcp`
+
+### TypeScript Initialization Errors
+
+If you see `Property '...' has no initializer and is not definitely assigned in the constructor`:
+
+- **Solution**: This is expected for TypeORM entities and NestJS DTOs. We have disabled `strictPropertyInitialization` in the root `tsconfig.base.json` to support this pattern.
 
 ---
 

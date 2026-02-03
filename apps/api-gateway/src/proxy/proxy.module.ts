@@ -1,10 +1,10 @@
-import {Module} from "@nestjs/common";
-import {HttpModule} from "@nestjs/axios";
-import {ConfigModule} from "@nestjs/config";
-import {ProxyService} from "./proxy.service";
-import {AuthProxyController} from "./controllers/auth-proxy.controller";
-import {ProductProxyController} from "./controllers/product-proxy.controller";
-import {OrderProxyController} from "./controllers/order-proxy.controller";
+import { Module } from '@nestjs/common';
+import { HttpModule } from '@nestjs/axios';
+import { ConfigModule } from '@nestjs/config';
+import { ProxyService } from './proxy.service';
+import { AuthProxyController } from './controllers/auth-proxy.controller';
+import { ProductProxyController } from './controllers/product-proxy.controller';
+import { OrderProxyController } from './controllers/order-proxy.controller';
 
 @Module({
   imports: [

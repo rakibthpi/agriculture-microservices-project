@@ -1,11 +1,21 @@
-import {Controller, Get, Post, Body, Patch, Param, Delete, Query, ParseUUIDPipe} from "@nestjs/common";
-import {ProductsService} from "./products.service";
-import {CreateProductDto} from "./dto/create-product.dto";
-import {UpdateProductDto} from "./dto/update-product.dto";
-import {ProductQueryDto} from "./dto/product-query.dto";
-import {UpdateStockDto} from "./dto/update-stock.dto";
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+  ParseUUIDPipe,
+} from '@nestjs/common';
+import { ProductsService } from './products.service';
+import { CreateProductDto } from './dto/create-product.dto';
+import { UpdateProductDto } from './dto/update-product.dto';
+import { ProductQueryDto } from './dto/product-query.dto';
+import { UpdateStockDto } from './dto/update-stock.dto';
 
-@Controller("products")
+@Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
@@ -15,7 +25,7 @@ export class ProductsController {
     return {
       success: true,
       data: product,
-      message: "Product created successfully",
+      message: 'Product created successfully',
     };
   }
 
@@ -29,7 +39,7 @@ export class ProductsController {
     };
   }
 
-  @Get("search")
+  @Get('search')
   async search(@Query() query: ProductQueryDto) {
     const result = await this.productsService.findAll(query);
     return {
@@ -39,8 +49,8 @@ export class ProductsController {
     };
   }
 
-  @Get("featured")
-  async findFeatured(@Query("limit") limit?: number) {
+  @Get('featured')
+  async findFeatured(@Query('limit') limit?: number) {
     const products = await this.productsService.findFeatured(limit);
     return {
       success: true,
@@ -48,8 +58,11 @@ export class ProductsController {
     };
   }
 
-  @Get("category/:categoryId")
-  async findByCategory(@Param("categoryId", ParseUUIDPipe) categoryId: string, @Query("limit") limit?: number) {
+  @Get('category/:categoryId')
+  async findByCategory(
+    @Param('categoryId', ParseUUIDPipe) categoryId: string,
+    @Query('limit') limit?: number,
+  ) {
     const products = await this.productsService.findByCategory(categoryId, limit);
     return {
       success: true,
@@ -57,8 +70,8 @@ export class ProductsController {
     };
   }
 
-  @Get(":id")
-  async findOne(@Param("id", ParseUUIDPipe) id: string) {
+  @Get(':id')
+  async findOne(@Param('id', ParseUUIDPipe) id: string) {
     const product = await this.productsService.findOne(id);
     return {
       success: true,
@@ -66,8 +79,8 @@ export class ProductsController {
     };
   }
 
-  @Get("slug/:slug")
-  async findBySlug(@Param("slug") slug: string) {
+  @Get('slug/:slug')
+  async findBySlug(@Param('slug') slug: string) {
     const product = await this.productsService.findBySlug(slug);
     return {
       success: true,
@@ -75,28 +88,35 @@ export class ProductsController {
     };
   }
 
-  @Patch(":id")
-  async update(@Param("id", ParseUUIDPipe) id: string, @Body() updateProductDto: UpdateProductDto) {
+  @Patch(':id')
+  async update(@Param('id', ParseUUIDPipe) id: string, @Body() updateProductDto: UpdateProductDto) {
     const product = await this.productsService.update(id, updateProductDto);
     return {
       success: true,
       data: product,
-      message: "Product updated successfully",
+      message: 'Product updated successfully',
     };
   }
 
-  @Patch(":id/stock")
-  async updateStock(@Param("id", ParseUUIDPipe) id: string, @Body() updateStockDto: UpdateStockDto) {
-    const product = await this.productsService.updateStock(id, updateStockDto.quantity, updateStockDto.operation);
+  @Patch(':id/stock')
+  async updateStock(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() updateStockDto: UpdateStockDto,
+  ) {
+    const product = await this.productsService.updateStock(
+      id,
+      updateStockDto.quantity,
+      updateStockDto.operation,
+    );
     return {
       success: true,
       data: product,
-      message: "Stock updated successfully",
+      message: 'Stock updated successfully',
     };
   }
 
-  @Get("inventory/low-stock")
-  async findLowStock(@Query("threshold") threshold: number = 10) {
+  @Get('inventory/low-stock')
+  async findLowStock(@Query('threshold') threshold: number = 10) {
     const products = await this.productsService.findLowStockAt(threshold);
     return {
       success: true,
@@ -104,12 +124,12 @@ export class ProductsController {
     };
   }
 
-  @Delete(":id")
-  async remove(@Param("id", ParseUUIDPipe) id: string) {
+  @Delete(':id')
+  async remove(@Param('id', ParseUUIDPipe) id: string) {
     await this.productsService.remove(id);
     return {
       success: true,
-      message: "Product deleted successfully",
+      message: 'Product deleted successfully',
     };
   }
 }

@@ -9,6 +9,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Resolved `EACCES` port conflict on Windows by migrating default ports:
+  - Auth Service: 3001 → 4001
+  - Product Service: 3002 → 4002
+  - Order Service: 3003 → 4003
+  - Frontend: 3000 → 4005
+- Fixed systemic TypeScript `strictPropertyInitialization` errors in entities and DTOs.
+- Resolved build failures due to missing `@nestjs/mapped-types` dependency.
+
+### Added
+
+- Comprehensive ESLint and Prettier configuration across the monorepo.
+- Troubleshooting guide for common Windows development issues in `README.md`.
+- System dependency and port mapping diagrams in `README.md`.
+
 ### Added
 
 - Project documentation structure

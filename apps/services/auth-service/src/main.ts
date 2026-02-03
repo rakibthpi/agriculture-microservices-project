@@ -1,14 +1,15 @@
-import {NestFactory} from "@nestjs/core";
-import {ValidationPipe} from "@nestjs/common";
-import {AppModule} from "./app.module";
-import {AllExceptionsFilter} from "./common/filters/http-exception.filter";
+import { NestFactory } from '@nestjs/core';
+import { ValidationPipe } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { AppModule } from './app.module';
+import { AllExceptionsFilter } from './common/filters/http-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   // Enable CORS
   app.enableCors({
-    origin: ["http://localhost:3000", "http://localhost:4000"],
+    origin: ['http://localhost:3000', 'http://localhost:4000'],
     credentials: true,
   });
 
@@ -25,9 +26,10 @@ async function bootstrap() {
   app.useGlobalFilters(new AllExceptionsFilter());
 
   // Global prefix
-  app.setGlobalPrefix("api");
+  app.setGlobalPrefix('api');
 
-  const port = process.env.PORT || 3001;
+  const configService = app.get(ConfigService);
+  const port = configService.get<number>('PORT') || 4001;
   await app.listen(port);
   console.log(`🚀 Auth Service running on http://localhost:${port}`);
 }

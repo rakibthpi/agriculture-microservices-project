@@ -13,10 +13,10 @@ export interface User {
 }
 
 export enum UserRole {
-  SUPER_ADMIN = "super_admin",
-  ADMIN = "admin",
-  PRODUCT_MANAGER = "product_manager",
-  USER = "user",
+  SUPER_ADMIN = 'super_admin',
+  ADMIN = 'admin',
+  PRODUCT_MANAGER = 'product_manager',
+  USER = 'user',
 }
 
 export interface JwtPayload {

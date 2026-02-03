@@ -1,10 +1,10 @@
-import {Injectable, NotFoundException, BadRequestException} from "@nestjs/common";
-import {InjectRepository} from "@nestjs/typeorm";
-import {Repository} from "typeorm";
-import {Order, OrderStatus} from "./entities/order.entity";
-import {OrderItem} from "./entities/order-item.entity";
-import {CreateOrderDto} from "./dto/create-order.dto";
-import {UpdateOrderStatusDto} from "./dto/update-order-status.dto";
+import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Order, OrderStatus } from './entities/order.entity';
+import { OrderItem } from './entities/order-item.entity';
+import { CreateOrderDto } from './dto/create-order.dto';
+import { UpdateOrderStatusDto } from './dto/update-order-status.dto';
 
 interface PaginatedResult<T> {
   data: T[];
@@ -16,7 +16,7 @@ interface PaginatedResult<T> {
   };
 }
 
-import {OrderIntegrationsService} from "../integrations/order-integrations.service";
+import { OrderIntegrationsService } from '../integrations/order-integrations.service';
 
 @Injectable()
 export class OrdersService {
@@ -29,7 +29,7 @@ export class OrdersService {
   ) {}
 
   async create(userId: string, createOrderDto: CreateOrderDto): Promise<Order> {
-    const {items, shippingAddress, notes} = createOrderDto;
+    const { items, shippingAddress, notes } = createOrderDto;
 
     // Calculate totals and validate products
     let subtotal = 0;
@@ -53,18 +53,18 @@ export class OrdersService {
         productName: product.data.name,
         productImage: product.data.image,
         quantity: item.quantity,
-        unit: product.data.unit || "kg",
+        unit: product.data.unit || 'kg',
         unitPrice: product.data.price,
         totalPrice,
       });
 
       // Reserve stock
-      await this.integrationsService.updateProductStock(item.productId, item.quantity, "subtract");
+      await this.integrationsService.updateProductStock(item.productId, item.quantity, 'subtract');
     }
 
     // Calculate shipping
-    const freeShippingThreshold = parseInt(process.env.FREE_SHIPPING_THRESHOLD || "1000", 10);
-    const defaultShippingCost = parseInt(process.env.DEFAULT_SHIPPING_COST || "50", 10);
+    const freeShippingThreshold = parseInt(process.env.FREE_SHIPPING_THRESHOLD || '1000', 10);
+    const defaultShippingCost = parseInt(process.env.DEFAULT_SHIPPING_COST || '50', 10);
     const shippingCost = subtotal >= freeShippingThreshold ? 0 : defaultShippingCost;
     const totalAmount = subtotal + shippingCost;
 
@@ -95,12 +95,12 @@ export class OrdersService {
 
   async findAll(page = 1, limit = 10, status?: OrderStatus): Promise<PaginatedResult<Order>> {
     const queryBuilder = this.orderRepository
-      .createQueryBuilder("order")
-      .leftJoinAndSelect("order.items", "items")
-      .orderBy("order.createdAt", "DESC");
+      .createQueryBuilder('order')
+      .leftJoinAndSelect('order.items', 'items')
+      .orderBy('order.createdAt', 'DESC');
 
     if (status) {
-      queryBuilder.where("order.status = :status", {status});
+      queryBuilder.where('order.status = :status', { status });
     }
 
     const skip = (page - 1) * limit;
@@ -123,9 +123,9 @@ export class OrdersService {
     const skip = (page - 1) * limit;
 
     const [data, total] = await this.orderRepository.findAndCount({
-      where: {userId},
-      relations: ["items"],
-      order: {createdAt: "DESC"},
+      where: { userId },
+      relations: ['items'],
+      order: { createdAt: 'DESC' },
       skip,
       take: limit,
     });
@@ -143,29 +143,29 @@ export class OrdersService {
 
   async findOne(id: string): Promise<Order> {
     const order = await this.orderRepository.findOne({
-      where: {id},
-      relations: ["items"],
+      where: { id },
+      relations: ['items'],
     });
     if (!order) {
-      throw new NotFoundException("Order not found");
+      throw new NotFoundException('Order not found');
     }
     return order;
   }
 
   async findByOrderNumber(orderNumber: string): Promise<Order> {
     const order = await this.orderRepository.findOne({
-      where: {orderNumber},
-      relations: ["items"],
+      where: { orderNumber },
+      relations: ['items'],
     });
     if (!order) {
-      throw new NotFoundException("Order not found");
+      throw new NotFoundException('Order not found');
     }
     return order;
   }
 
   async updateStatus(id: string, updateStatusDto: UpdateOrderStatusDto): Promise<Order> {
     const order = await this.findOne(id);
-    const {status, cancelledReason} = updateStatusDto;
+    const { status, cancelledReason } = updateStatusDto;
 
     // Validate status transitions
     this.validateStatusTransition(order.status, status);
@@ -186,11 +186,11 @@ export class OrdersService {
         break;
       case OrderStatus.CANCELLED:
         order.cancelledAt = now;
-        order.cancelledReason = cancelledReason || "No reason provided";
+        order.cancelledReason = cancelledReason || 'No reason provided';
 
         // Reverse stock
         for (const item of order.items) {
-          await this.integrationsService.updateProductStock(item.productId, item.quantity, "add");
+          await this.integrationsService.updateProductStock(item.productId, item.quantity, 'add');
         }
         break;
     }
@@ -209,7 +209,7 @@ export class OrdersService {
   }
 
   async cancel(id: string, reason: string): Promise<Order> {
-    return this.updateStatus(id, {status: OrderStatus.CANCELLED, cancelledReason: reason});
+    return this.updateStatus(id, { status: OrderStatus.CANCELLED, cancelledReason: reason });
   }
 
   private validateStatusTransition(currentStatus: OrderStatus, newStatus: OrderStatus): void {
@@ -228,10 +228,10 @@ export class OrdersService {
 
   async countByStatus(): Promise<Record<OrderStatus, number>> {
     const counts = await this.orderRepository
-      .createQueryBuilder("order")
-      .select("order.status", "status")
-      .addSelect("COUNT(*)", "count")
-      .groupBy("order.status")
+      .createQueryBuilder('order')
+      .select('order.status', 'status')
+      .addSelect('COUNT(*)', 'count')
+      .groupBy('order.status')
       .getRawMany();
 
     const result: Record<string, number> = {};

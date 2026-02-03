@@ -1,9 +1,9 @@
-import {Injectable, ConflictException, NotFoundException} from "@nestjs/common";
-import {InjectRepository} from "@nestjs/typeorm";
-import {Repository} from "typeorm";
-import {User, UserRole} from "./entities/user.entity";
-import {CreateUserDto} from "./dto/create-user.dto";
-import {UpdateUserDto} from "./dto/update-user.dto";
+import { Injectable, ConflictException, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { User, UserRole } from './entities/user.entity';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -14,11 +14,11 @@ export class UsersService {
 
   async create(createUserDto: CreateUserDto): Promise<User> {
     const existingUser = await this.userRepository.findOne({
-      where: {email: createUserDto.email},
+      where: { email: createUserDto.email },
     });
 
     if (existingUser) {
-      throw new ConflictException("Email already exists");
+      throw new ConflictException('Email already exists');
     }
 
     const user = this.userRepository.create(createUserDto);
@@ -30,37 +30,39 @@ export class UsersService {
     limit?: number;
     role?: UserRole;
     search?: string;
-  }): Promise<{data: User[]; total: number}> {
-    const {page = 1, limit = 10, role, search} = query;
+  }): Promise<{ data: User[]; total: number }> {
+    const { page = 1, limit = 10, role, search } = query;
     const skip = (page - 1) * limit;
 
-    const queryBuilder = this.userRepository.createQueryBuilder("user");
+    const queryBuilder = this.userRepository.createQueryBuilder('user');
 
     if (role) {
-      queryBuilder.andWhere("user.role = :role", {role});
+      queryBuilder.andWhere('user.role = :role', { role });
     }
 
     if (search) {
-      queryBuilder.andWhere("(user.name ILIKE :search OR user.email ILIKE :search)", {search: `%${search}%`});
+      queryBuilder.andWhere('(user.name ILIKE :search OR user.email ILIKE :search)', {
+        search: `%${search}%`,
+      });
     }
 
-    queryBuilder.orderBy("user.createdAt", "DESC").skip(skip).take(limit);
+    queryBuilder.orderBy('user.createdAt', 'DESC').skip(skip).take(limit);
 
     const [data, total] = await queryBuilder.getManyAndCount();
 
-    return {data, total};
+    return { data, total };
   }
 
   async findOne(id: string): Promise<User> {
-    const user = await this.userRepository.findOne({where: {id}});
+    const user = await this.userRepository.findOne({ where: { id } });
     if (!user) {
-      throw new NotFoundException("User not found");
+      throw new NotFoundException('User not found');
     }
     return user;
   }
 
   async findByEmail(email: string): Promise<User | null> {
-    return this.userRepository.findOne({where: {email}});
+    return this.userRepository.findOne({ where: { email } });
   }
 
   async update(id: string, updateUserDto: UpdateUserDto): Promise<User> {
@@ -75,13 +77,13 @@ export class UsersService {
   }
 
   async updateLastLogin(id: string): Promise<void> {
-    await this.userRepository.update(id, {lastLogin: new Date()});
+    await this.userRepository.update(id, { lastLogin: new Date() });
   }
 
   async findByRole(role: UserRole): Promise<User[]> {
     return this.userRepository.find({
-      where: {role},
-      order: {createdAt: "DESC"},
+      where: { role },
+      order: { createdAt: 'DESC' },
     });
   }
 

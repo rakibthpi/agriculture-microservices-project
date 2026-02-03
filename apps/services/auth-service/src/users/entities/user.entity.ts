@@ -6,22 +6,22 @@ import {
   UpdateDateColumn,
   BeforeInsert,
   BeforeUpdate,
-} from "typeorm";
-import * as bcrypt from "bcrypt";
+} from 'typeorm';
+import * as bcrypt from 'bcrypt';
 
 export enum UserRole {
-  SUPER_ADMIN = "super_admin",
-  ADMIN = "admin",
-  PRODUCT_MANAGER = "product_manager",
-  USER = "user",
+  SUPER_ADMIN = 'super_admin',
+  ADMIN = 'admin',
+  PRODUCT_MANAGER = 'product_manager',
+  USER = 'user',
 }
 
-@Entity("users")
+@Entity('users')
 export class User {
-  @PrimaryGeneratedColumn("uuid")
+  @PrimaryGeneratedColumn('uuid')
   id!: string;
 
-  @Column({unique: true})
+  @Column({ unique: true })
   email!: string;
 
   @Column()
@@ -30,42 +30,42 @@ export class User {
   @Column()
   name!: string;
 
-  @Column({nullable: true})
-  phone?: string | null;
+  @Column({ nullable: true })
+  phone!: string;
 
-  @Column({name: "avatar_url", nullable: true})
-  avatarUrl?: string | null;
+  @Column({ name: 'avatar_url', nullable: true })
+  avatarUrl!: string;
 
   @Column({
-    type: "enum",
+    type: 'enum',
     enum: UserRole,
     default: UserRole.USER,
   })
   role!: UserRole;
 
-  @Column({name: "is_active", default: true})
+  @Column({ name: 'is_active', default: true })
   isActive!: boolean;
 
-  @Column({name: "email_verified", default: false})
+  @Column({ name: 'email_verified', default: false })
   emailVerified!: boolean;
 
-  @Column({name: "last_login", type: "timestamp", nullable: true})
-  lastLogin?: Date | null;
+  @Column({ name: 'last_login', type: 'timestamp', nullable: true })
+  lastLogin!: Date;
 
-  @Column({name: "refresh_token_hash", nullable: true})
-  refreshTokenHash?: string | null;
+  @Column({ name: 'refresh_token_hash', nullable: true })
+  refreshTokenHash!: string;
 
-  @CreateDateColumn({name: "created_at"})
+  @CreateDateColumn({ name: 'created_at' })
   createdAt!: Date;
 
-  @UpdateDateColumn({name: "updated_at"})
+  @UpdateDateColumn({ name: 'updated_at' })
   updatedAt!: Date;
 
   @BeforeInsert()
   @BeforeUpdate()
   async hashPassword() {
-    if (this.password && !this.password.startsWith("$2b$")) {
-      const rounds = parseInt(process.env.BCRYPT_ROUNDS || "10", 10);
+    if (this.password && !this.password.startsWith('$2b$')) {
+      const rounds = parseInt(process.env.BCRYPT_ROUNDS || '10', 10);
       this.password = await bcrypt.hash(this.password, rounds);
     }
   }
@@ -75,7 +75,7 @@ export class User {
   }
 
   toJSON() {
-    const {password, ...result} = this as any;
+    const { password: _password, ...result } = this as any;
     return result;
   }
 }

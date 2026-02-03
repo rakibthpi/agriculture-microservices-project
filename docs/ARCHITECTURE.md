@@ -234,11 +234,11 @@ User → Frontend → Gateway → Order Service → Order DB
 
 | Service         | Development Port | Description           |
 | --------------- | ---------------- | --------------------- |
-| Frontend        | 3000             | Next.js application   |
+| Frontend        | 4005             | Next.js application   |
 | API Gateway     | 4000             | Request routing       |
-| Auth Service    | 3001             | Authentication        |
-| Product Service | 3002             | Products & Categories |
-| Order Service   | 3003             | Order management      |
+| Auth Service    | 4001             | Authentication        |
+| Product Service | 4002             | Products & Categories |
+| Order Service   | 4003             | Order management      |
 | Auth DB         | 5432             | PostgreSQL            |
 | Product DB      | 5433             | PostgreSQL            |
 | Order DB        | 5434             | PostgreSQL            |

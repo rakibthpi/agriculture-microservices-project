@@ -1,5 +1,13 @@
-import {IsString, IsArray, IsNumber, IsOptional, IsUUID, ValidateNested, Min} from "class-validator";
-import {Type} from "class-transformer";
+import {
+  IsString,
+  IsArray,
+  IsNumber,
+  IsOptional,
+  IsUUID,
+  ValidateNested,
+  Min,
+} from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class OrderItemDto {
   @IsUUID()
@@ -56,7 +64,7 @@ export class CreateOrderDto {
   userId?: string;
 
   @IsArray()
-  @ValidateNested({each: true})
+  @ValidateNested({ each: true })
   @Type(() => OrderItemDto)
   items: OrderItemDto[];
 

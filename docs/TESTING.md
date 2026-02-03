@@ -55,33 +55,33 @@ npm run test --workspace=frontend
 
 ```typescript
 // users.service.spec.ts
-describe("UsersService", () => {
+describe('UsersService', () => {
   let service: UsersService;
   let repository: MockRepository<User>;
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
-      providers: [UsersService, {provide: getRepositoryToken(User), useClass: MockRepository}],
+      providers: [UsersService, { provide: getRepositoryToken(User), useClass: MockRepository }],
     }).compile();
 
     service = module.get(UsersService);
     repository = module.get(getRepositoryToken(User));
   });
 
-  describe("findById", () => {
-    it("should return user when found", async () => {
-      const user = {id: "uuid", email: "test@test.com"};
+  describe('findById', () => {
+    it('should return user when found', async () => {
+      const user = { id: 'uuid', email: 'test@test.com' };
       repository.findOne.mockResolvedValue(user);
 
-      const result = await service.findById("uuid");
+      const result = await service.findById('uuid');
 
       expect(result).toEqual(user);
     });
 
-    it("should throw NotFoundException when not found", async () => {
+    it('should throw NotFoundException when not found', async () => {
       repository.findOne.mockResolvedValue(null);
 
-      await expect(service.findById("invalid")).rejects.toThrow(NotFoundException);
+      await expect(service.findById('invalid')).rejects.toThrow(NotFoundException);
     });
   });
 });
@@ -123,7 +123,7 @@ describe('ProductCard', () => {
 
 ```typescript
 // auth.e2e-spec.ts
-describe("Auth (e2e)", () => {
+describe('Auth (e2e)', () => {
   let app: INestApplication;
 
   beforeAll(async () => {
@@ -135,29 +135,29 @@ describe("Auth (e2e)", () => {
     await app.init();
   });
 
-  describe("/auth/register (POST)", () => {
-    it("should register new user", () => {
+  describe('/auth/register (POST)', () => {
+    it('should register new user', () => {
       return request(app.getHttpServer())
-        .post("/auth/register")
+        .post('/auth/register')
         .send({
-          email: "test@example.com",
-          password: "Password123!",
-          name: "Test User",
+          email: 'test@example.com',
+          password: 'Password123!',
+          name: 'Test User',
         })
         .expect(201)
         .expect((res) => {
-          expect(res.body.data).toHaveProperty("id");
-          expect(res.body.data.email).toBe("test@example.com");
+          expect(res.body.data).toHaveProperty('id');
+          expect(res.body.data.email).toBe('test@example.com');
         });
     });
 
-    it("should reject duplicate email", () => {
+    it('should reject duplicate email', () => {
       return request(app.getHttpServer())
-        .post("/auth/register")
+        .post('/auth/register')
         .send({
-          email: "test@example.com",
-          password: "Password123!",
-          name: "Test User",
+          email: 'test@example.com',
+          password: 'Password123!',
+          name: 'Test User',
         })
         .expect(409);
     });

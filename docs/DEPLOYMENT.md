@@ -114,11 +114,11 @@ npm run dev
 
 | Service         | URL                          | Expected          |
 | --------------- | ---------------------------- | ----------------- |
-| Frontend        | http://localhost:3000        | Homepage          |
+| Frontend        | http://localhost:4005        | Homepage          |
 | API Gateway     | http://localhost:4000/health | `{"status":"ok"}` |
-| Auth Service    | http://localhost:3001/health | `{"status":"ok"}` |
-| Product Service | http://localhost:3002/health | `{"status":"ok"}` |
-| Order Service   | http://localhost:3003/health | `{"status":"ok"}` |
+| Auth Service    | http://localhost:4001/health | `{"status":"ok"}` |
+| Product Service | http://localhost:4002/health | `{"status":"ok"}` |
+| Order Service   | http://localhost:4003/health | `{"status":"ok"}` |
 
 ---
 
@@ -148,36 +148,36 @@ services:
   # Databases
   postgres-auth:
     image: postgres:14-alpine
-    ports: ["5432:5432"]
+    ports: ['5432:5432']
 
   postgres-product:
     image: postgres:14-alpine
-    ports: ["5433:5432"]
+    ports: ['5433:5432']
 
   postgres-order:
     image: postgres:14-alpine
-    ports: ["5434:5432"]
+    ports: ['5434:5432']
 
   # Services
   auth-service:
     build: ./apps/services/auth-service
-    ports: ["3001:3001"]
+    ports: ['4001:4001']
 
   product-service:
     build: ./apps/services/product-service
-    ports: ["3002:3002"]
+    ports: ['4002:4002']
 
   order-service:
     build: ./apps/services/order-service
-    ports: ["3003:3003"]
+    ports: ['4003:4003']
 
   api-gateway:
     build: ./apps/api-gateway
-    ports: ["4000:4000"]
+    ports: ['4000:4000']
 
   frontend:
     build: ./apps/frontend
-    ports: ["3000:3000"]
+    ports: ['4005:4005']
 ```
 
 ---
@@ -280,7 +280,7 @@ JWT_REFRESH_SECRET=your-refresh-secret-key
 JWT_REFRESH_EXPIRES_IN=7d
 
 # Service
-PORT=3001
+PORT=4001
 NODE_ENV=development
 ```
 
@@ -295,11 +295,11 @@ DATABASE_USER=postgres
 DATABASE_PASSWORD=your_password
 
 # Service
-PORT=3002
+PORT=4002
 NODE_ENV=development
 
 # Internal Services
-AUTH_SERVICE_URL=http://localhost:3001
+AUTH_SERVICE_URL=http://localhost:4001
 ```
 
 ### Order Service
@@ -313,12 +313,12 @@ DATABASE_USER=postgres
 DATABASE_PASSWORD=your_password
 
 # Service
-PORT=3003
+PORT=4003
 NODE_ENV=development
 
 # Internal Services
-AUTH_SERVICE_URL=http://localhost:3001
-PRODUCT_SERVICE_URL=http://localhost:3002
+AUTH_SERVICE_URL=http://localhost:4001
+PRODUCT_SERVICE_URL=http://localhost:4002
 ```
 
 ### API Gateway
@@ -328,12 +328,12 @@ PORT=4000
 NODE_ENV=development
 
 # Service URLs
-AUTH_SERVICE_URL=http://localhost:3001
-PRODUCT_SERVICE_URL=http://localhost:3002
-ORDER_SERVICE_URL=http://localhost:3003
+AUTH_SERVICE_URL=http://localhost:4001
+PRODUCT_SERVICE_URL=http://localhost:4002
+ORDER_SERVICE_URL=http://localhost:4003
 
 # CORS
-ALLOWED_ORIGINS=http://localhost:3000
+ALLOWED_ORIGINS=http://localhost:4005
 ```
 
 ### Frontend
@@ -376,6 +376,19 @@ Error: ECONNREFUSED http://localhost:3001
 3. Check if all services are running
 
 ---
+
+#### Windows Port Exclusion (EACCES)
+
+```
+Error: listen EACCES: permission denied 0.0.0.0:3001
+```
+
+**Solution:**
+
+Windows often reserves ports in the `3000` range for system services.
+
+1. Check reserved ranges: `netsh int ipv4 show excludedportrange protocol=tcp`
+2. Move services to the `4000+` range (as configured by default in this project now).
 
 #### JWT Token Invalid
 
@@ -428,9 +441,9 @@ taskkill /PID <pid> /F
 ```bash
 # Check all services
 curl http://localhost:4000/health
-curl http://localhost:3001/health
-curl http://localhost:3002/health
-curl http://localhost:3003/health
+curl http://localhost:4001/health
+curl http://localhost:4002/health
+curl http://localhost:4003/health
 
 # Expected response
 {"status":"ok","timestamp":"2024-01-15T10:00:00Z"}

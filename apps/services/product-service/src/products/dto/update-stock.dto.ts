@@ -1,4 +1,4 @@
-import {IsNotEmpty, IsNumber, IsString, IsIn, Min} from "class-validator";
+import { IsNotEmpty, IsNumber, IsString, IsIn, Min } from 'class-validator';
 
 export class UpdateStockDto {
   @IsNotEmpty()
@@ -8,6 +8,6 @@ export class UpdateStockDto {
 
   @IsNotEmpty()
   @IsString()
-  @IsIn(["add", "subtract", "set"])
-  operation!: "add" | "subtract" | "set";
+  @IsIn(['add', 'subtract', 'set'])
+  operation!: 'add' | 'subtract' | 'set';
 }
