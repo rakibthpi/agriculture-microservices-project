@@ -19,47 +19,47 @@ export enum UserRole {
 @Entity("users")
 export class User {
   @PrimaryGeneratedColumn("uuid")
-  id: string;
+  id!: string;
 
   @Column({unique: true})
-  email: string;
+  email!: string;
 
   @Column()
-  password: string;
+  password!: string;
 
   @Column()
-  name: string;
+  name!: string;
 
   @Column({nullable: true})
-  phone: string;
+  phone?: string | null;
 
   @Column({name: "avatar_url", nullable: true})
-  avatarUrl: string;
+  avatarUrl?: string | null;
 
   @Column({
     type: "enum",
     enum: UserRole,
     default: UserRole.USER,
   })
-  role: UserRole;
+  role!: UserRole;
 
   @Column({name: "is_active", default: true})
-  isActive: boolean;
+  isActive!: boolean;
 
   @Column({name: "email_verified", default: false})
-  emailVerified: boolean;
+  emailVerified!: boolean;
 
   @Column({name: "last_login", type: "timestamp", nullable: true})
-  lastLogin: Date;
+  lastLogin?: Date | null;
 
   @Column({name: "refresh_token_hash", nullable: true})
-  refreshTokenHash: string;
+  refreshTokenHash?: string | null;
 
   @CreateDateColumn({name: "created_at"})
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn({name: "updated_at"})
-  updatedAt: Date;
+  updatedAt!: Date;
 
   @BeforeInsert()
   @BeforeUpdate()

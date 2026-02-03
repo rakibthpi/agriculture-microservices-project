@@ -1,6 +1,5 @@
 import {DataSource} from "typeorm";
-import {User} from "../users/entities/user.entity";
-import {UserRole} from "@agri/shared";
+import {User, UserRole} from "../users/entities/user.entity";
 import * as bcrypt from "bcrypt";
 import {dataSourceOptions} from "./data-source";
 

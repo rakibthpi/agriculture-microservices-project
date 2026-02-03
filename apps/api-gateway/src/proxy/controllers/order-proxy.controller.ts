@@ -8,7 +8,7 @@ export class OrderProxyController {
 
   @All("*")
   async proxyToOrder(@Req() req: Request, @Body() body: any, @Query() query: any, @Headers() headers: any) {
-    const path = `/api${req.path}`;
+    const path = `${req.baseUrl}${req.path}`;
     const proxyHeaders: Record<string, string> = {};
 
     if (headers.authorization) {

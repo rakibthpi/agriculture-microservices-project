@@ -8,7 +8,7 @@ export class AuthProxyController {
 
   @All("*")
   async proxyToAuth(@Req() req: Request, @Body() body: any, @Query() query: any, @Headers() headers: any) {
-    const path = `/api/auth${req.path.replace("/auth", "")}`;
+    const path = `${req.baseUrl}${req.path}`;
     const proxyHeaders: Record<string, string> = {};
 
     if (headers.authorization) {
