@@ -1,0 +1,97 @@
+version: "3.8"
+
+services:
+  # ==========================================
+  # PostgreSQL Databases (One per Service)
+  # ==========================================
+
+  postgres-auth:
+    image: postgres:14-alpine
+    container_name: agri-auth-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: auth_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - auth_data:/var/lib/postgresql/data
+    networks:
+      - agri-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  postgres-product:
+    image: postgres:14-alpine
+    container_name: agri-product-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: product_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - product_data:/var/lib/postgresql/data
+    networks:
+      - agri-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  postgres-order:
+    image: postgres:14-alpine
+    container_name: agri-order-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: order_db
+    ports:
+      - "5434:5432"
+    volumes:
+      - order_data:/var/lib/postgresql/data
+    networks:
+      - agri-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ==========================================
+  # pgAdmin (Optional - Database Management)
+  # ==========================================
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: agri-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@agri.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+    ports:
+      - "5050:80"
+    networks:
+      - agri-network
+    depends_on:
+      - postgres-auth
+      - postgres-product
+      - postgres-order
+
+# ==========================================
+# Networks
+# ==========================================
+networks:
+  agri-network:
+    driver: bridge
+
+# ==========================================
+# Volumes (Persistent Data)
+# ==========================================
+volumes:
+  auth_data:
+  product_data:
+  order_data:
