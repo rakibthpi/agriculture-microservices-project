@@ -75,7 +75,7 @@ export class User {
   }
 
   toJSON() {
-    const { password, ...result } = this as any;
+    const { password: _password, ...result } = this as any;
     return result;
   }
 }

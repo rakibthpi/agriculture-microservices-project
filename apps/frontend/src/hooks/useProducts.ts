@@ -3,7 +3,7 @@
 import { useQuery } from '@tanstack/react-query';
 import api from '@/lib/api-client';
 
-interface Product {
+export interface Product {
   id: string;
   name: string;
   price: number;

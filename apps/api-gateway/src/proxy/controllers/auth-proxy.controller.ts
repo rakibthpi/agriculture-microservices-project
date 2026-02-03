@@ -1,5 +1,5 @@
-import { Controller, All, Req, Res, Param, Body, Query, Headers } from '@nestjs/common';
-import { Request, Response } from 'express';
+import { Controller, All, Req, Body, Query, Headers } from '@nestjs/common';
+import { Request } from 'express';
 import { ProxyService } from '../proxy.service';
 
 @Controller('auth')
